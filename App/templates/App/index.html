@@ -1,0 +1,65 @@
+{% extends 'App/base.html' %}
+{% load static %}
+
+{% block title %}Водить.РФ — Обучение вождению речного транспорта{% endblock %}
+
+{% block content %}
+    <div class="slider-container relative rounded-xl overflow-hidden shadow-lg mb-8 bg-gray-200">
+        <div class="slider-track">
+            <div class="slider-slide">
+                <img src="{% static 'images/slide-1.jpg' %}" alt="Катер" class="w-full h-[280px] sm:h-[400px] object-cover">
+            </div>
+            <div class="slider-slide">
+                <img src="{% static 'images/slide-2.jpg' %}" alt="Круизный лайнер" class="w-full h-[280px] sm:h-[400px] object-cover">
+            </div>
+            <div class="slider-slide">
+                <img src="{% static 'images/slide-3.jpg' %}" alt="Яхта" class="w-full h-[280px] sm:h-[400px] object-cover">
+            </div>
+            <div class="slider-slide">
+                <img src="{% static 'images/slide-4.jpg' %}" alt="Речной транспорт" class="w-full h-[280px] sm:h-[400px] object-cover">
+            </div>
+        </div>
+        <button class="slider-prev absolute left-2 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white rounded-full w-10 h-10 flex items-center justify-center text-2xl transition z-10">&lsaquo;</button>
+        <button class="slider-next absolute right-2 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white rounded-full w-10 h-10 flex items-center justify-center text-2xl transition z-10">&rsaquo;</button>
+        <div class="slider-dots-container absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+            <button class="slider-dot w-2.5 h-2.5 rounded-full bg-white/50 transition"></button>
+            <button class="slider-dot w-2.5 h-2.5 rounded-full bg-white/50 transition"></button>
+            <button class="slider-dot w-2.5 h-2.5 rounded-full bg-white/50 transition"></button>
+            <button class="slider-dot w-2.5 h-2.5 rounded-full bg-white/50 transition"></button>
+        </div>
+    </div>
+
+    <div class="text-center mb-10">
+        <h1 class="text-3xl sm:text-4xl font-bold text-sea-blue mb-3">Добро пожаловать на портал «Водить.РФ»</h1>
+        <p class="text-base sm:text-lg text-metal-gray max-w-2xl mx-auto leading-relaxed">
+            Информационная система для записи на курсы обучения вождению речного транспорта.
+            Катера, круизные лайнеры, яхты — выберите своё направление и начните обучение уже сегодня!
+        </p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-8">
+        <div class="bg-white rounded-xl shadow-sm p-6 text-center border border-gray-100">
+            <div class="text-4xl mb-3">🛥️</div>
+            <h3 class="text-lg font-medium text-sea-blue mb-2">Катера</h3>
+            <p class="text-sm text-metal-gray font-light">Освойте управление моторными катерами на любых водных маршрутах</p>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm p-6 text-center border border-gray-100">
+            <div class="text-4xl mb-3">🚢</div>
+            <h3 class="text-lg font-medium text-sea-blue mb-2">Круизные лайнеры</h3>
+            <p class="text-sm text-metal-gray font-light">Профессиональное обучение управлению крупными круизными судами</p>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm p-6 text-center border border-gray-100">
+            <div class="text-4xl mb-3">⛵</div>
+            <h3 class="text-lg font-medium text-sea-blue mb-2">Яхты</h3>
+            <p class="text-sm text-metal-gray font-light">Курсы по вождению парусных и моторных яхт любого класса</p>
+        </div>
+    </div>
+
+    <div class="text-center">
+        {% if user.is_authenticated %}
+            <a href="{% url 'application_create' %}" class="inline-block bg-sea-blue text-white px-8 py-3 rounded-xl text-lg font-medium hover:bg-blue-600 transition shadow-md">Подать заявку на обучение</a>
+        {% else %}
+            <a href="{% url 'register' %}" class="inline-block bg-sea-blue text-white px-8 py-3 rounded-xl text-lg font-medium hover:bg-blue-600 transition shadow-md">Записаться на курсы</a>
+        {% endif %}
+    </div>
+{% endblock %}

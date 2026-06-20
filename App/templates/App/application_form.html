@@ -1,0 +1,59 @@
+{% extends 'App/base.html' %}
+{% load static %}
+
+{% block title %}Новая заявка — Водить.РФ{% endblock %}
+
+{% block content %}
+<div class="max-w-lg mx-auto">
+    <div class="bg-white rounded-xl shadow-md p-6 sm:p-8">
+        <h1 class="text-2xl font-bold text-sea-blue text-center mb-2">Заявка на обучение</h1>
+        <p class="text-sm text-metal-gray text-center mb-6 font-light">Заполните форму для записи на курсы вождения речного транспорта</p>
+
+        <form method="post" novalidate class="space-y-5" id="application-form">
+            {% csrf_token %}
+
+            {% for field in form %}
+            <div>
+                <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                    <div class="error-text">
+                        {% for error in field.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+
+            <button type="submit" class="w-full bg-sea-blue text-white py-3 rounded-lg font-medium text-base hover:bg-blue-600 transition shadow-md">
+                Отправить заявку
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const dateInput = document.querySelector('[name="start_date"]');
+    if (dateInput) {
+        dateInput.addEventListener('blur', function() {
+            if (this.value && !/^\d{2}\.\d{2}\.\d{4}$/.test(this.value)) {
+                this.classList.add('error');
+                const parent = this.parentElement;
+                if (!parent.querySelector('.error-text')) {
+                    const div = document.createElement('div');
+                    div.className = 'error-text';
+                    div.textContent = 'Формат даты: ДД.ММ.ГГГГ';
+                    parent.appendChild(div);
+                }
+            } else {
+                this.classList.remove('error');
+                const errorText = this.parentElement.querySelector('.error-text');
+                if (errorText) errorText.remove();
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

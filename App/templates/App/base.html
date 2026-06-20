@@ -1,0 +1,60 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>{% block title %}Водить.РФ{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'sea-blue': '#007BFF',
+                        'turquoise': '#4CCFE0',
+                        'forest-green': '#28A745',
+                        'metal-gray': '#6C757D',
+                    },
+                    fontFamily: {
+                        rubik: ['Rubik', 'sans-serif'],
+                    },
+                    screens: {
+                        'mobile': {'max': '389px'},
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body class="font-rubik bg-gray-50 text-gray-800 min-h-screen flex flex-col">
+    <nav class="bg-sea-blue text-white shadow-md">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+            <a href="{% url 'index' %}" class="text-xl font-bold tracking-wide">Водить.РФ</a>
+            <div class="flex items-center gap-4 text-sm">
+                {% if user.is_authenticated %}
+                    <span class="hidden sm:inline text-white/80">{{ user.username }}</span>
+                    <a href="{% url 'profile' %}" class="hover:text-turquoise transition">Личный кабинет</a>
+                    <a href="{% url 'application_create' %}" class="bg-white text-sea-blue px-3 py-1.5 rounded-lg font-medium hover:bg-gray-100 transition text-sm">Заявка</a>
+                    <form method="post" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="hover:text-turquoise transition">Выйти</button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'login' %}" class="hover:text-turquoise transition">Войти</a>
+                    <a href="{% url 'register' %}" class="bg-white text-sea-blue px-3 py-1.5 rounded-lg font-medium hover:bg-gray-100 transition text-sm">Регистрация</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-1 max-w-5xl mx-auto w-full px-4 py-6">
+        {% block content %}{% endblock %}
+    </main>
+
+    
+
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>

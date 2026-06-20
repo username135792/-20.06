@@ -1,0 +1,100 @@
+{% extends 'App/base.html' %}
+{% load static %}
+
+{% block title %}Регистрация — Водить.РФ{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto">
+    <div class="bg-white rounded-xl shadow-md p-6 sm:p-8">
+        <h1 class="text-2xl font-bold text-sea-blue text-center mb-6">Регистрация</h1>
+
+        <form method="post" novalidate class="space-y-4" id="register-form">
+            {% csrf_token %}
+
+            {% for field in form %}
+            <div>
+                <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                    <div class="error-text">
+                        {% for error in field.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+
+            <button type="submit" class="w-full bg-sea-blue text-white py-3 rounded-lg font-medium text-base hover:bg-blue-600 transition shadow-md">
+                Зарегистрироваться
+            </button>
+        </form>
+
+        <p class="text-center text-sm text-metal-gray mt-5">
+            Уже есть аккаунт?
+            <a href="{% url 'login' %}" class="text-sea-blue font-medium hover:underline">Войти</a>
+        </p>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('register-form');
+    if (!form) return;
+
+    const username = form.querySelector('[name="username"]');
+    const password = form.querySelector('[name="password"]');
+    const confirmPass = form.querySelector('[name="confirm_password"]');
+    const birthDate = form.querySelector('[name="birth_date"]');
+
+    function validateField(input, checker) {
+        const errorDiv = input.parentElement.querySelector('.error-text');
+        const result = checker(input.value);
+        if (result) {
+            input.classList.add('error');
+            if (!errorDiv) {
+                const div = document.createElement('div');
+                div.className = 'error-text';
+                div.textContent = result;
+                input.parentElement.appendChild(div);
+            }
+        } else {
+            input.classList.remove('error');
+            if (errorDiv) errorDiv.remove();
+        }
+    }
+
+    username?.addEventListener('blur', function() {
+        const val = this.value;
+        if (val.length < 6) return validateField(this, () => 'Логин должен быть минимум 6 символов');
+        if (!/^[a-zA-Z0-9]+$/.test(val)) return validateField(this, () => 'Только латинские буквы и цифры');
+        validateField(this, () => null);
+    });
+
+    password?.addEventListener('blur', function() {
+        if (this.value.length > 0 && this.value.length < 8) {
+            validateField(this, () => 'Пароль должен быть минимум 8 символов');
+        } else {
+            validateField(this, () => null);
+        }
+    });
+
+    confirmPass?.addEventListener('blur', function() {
+        if (this.value && password?.value && this.value !== password.value) {
+            validateField(this, () => 'Пароли не совпадают');
+        } else {
+            validateField(this, () => null);
+        }
+        confirmPass.classList.remove('error');
+    });
+
+    birthDate?.addEventListener('blur', function() {
+        if (this.value && !/^\d{2}\.\d{2}\.\d{4}$/.test(this.value)) {
+            validateField(this, () => 'Формат: ДД.ММ.ГГГГ');
+        } else {
+            validateField(this, () => null);
+        }
+    });
+});
+</script>
+{% endblock %}
